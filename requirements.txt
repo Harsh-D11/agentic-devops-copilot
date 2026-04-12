@@ -1,0 +1,10 @@
+langchain
+langgraph
+chromadb
+groq
+langchain-groq
+langchain-community
+pypdf
+python-dotenv
+sentence-transformers
+openai
