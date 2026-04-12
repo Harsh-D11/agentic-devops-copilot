@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  copilot:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./chroma_db:/app/chroma_db
