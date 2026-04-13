@@ -388,6 +388,77 @@ query = st.text_input(
     "",
     value=st.session_state.query,
     placeholder="e.g. My VPN is not connecting since this morning...",
-    key="input_box",
-    label_visibility="collapsed"
+    key="input_box"
 )
+
+st.markdown("**Common issues:**")
+examples = [
+    "How to reset Windows password?",
+    "VPN not connecting",
+    "Printer is offline",
+    "Error 404 on server",
+    "Computer running slow",
+    "No internet connection"
+]
+cols = st.columns(2)
+for i, ex in enumerate(examples):
+    if cols[i % 2].button(ex, key=ex):
+        st.session_state.query = ex
+        st.session_state.submitted = True
+        st.rerun()
+
+resolve = st.button("🚀 Get Resolution", type="primary")
+if resolve and query.strip():
+    st.session_state.query = query
+    st.session_state.submitted = True
+    st.rerun()
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# --- Result ---
+if st.session_state.submitted and st.session_state.query.strip():
+    st.session_state.submitted = False
+    with st.spinner("🤖 DeskAI is analyzing your issue..."):
+        result = app_graph.invoke({
+            "query": st.session_state.query,
+            "docs": [],
+            "context": "",
+            "response": "",
+            "confidence": "",
+            "escalate": False,
+            "attempts": 0
+        })
+
+    r1, r2, r3 = st.columns(3)
+    with r1:
+        st.metric("Status", "🚨 Escalated" if result["escalate"] else "✅ Resolved")
+    with r2:
+        st.metric("Confidence", result["confidence"])
+    with r3:
+        st.metric("Response Time", "< 2s")
+
+    if result["escalate"]:
+        st.markdown(f"""
+        <div class="escalate-card">
+            <div class="escalate-title">🚨 Escalated to Engineer</div>
+            <div class="result-text">{result["response"]}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div class="result-card">
+            <div class="result-title">✅ Resolution</div>
+            <div class="result-text">{result["response"]}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with st.expander("🔍 View Knowledge Base Sources"):
+        st.code(result["context"], language="text")
+
+# --- Footer ---
+st.markdown("""
+<div class="footer">
+    © 2026 DeskAI &nbsp;|&nbsp; Enterprise IT Automation &nbsp;|&nbsp;
+    <a href="https://github.com/Harsh-D11/agentic-devops-copilot">GitHub</a>
+</div>
+""", unsafe_allow_html=True)
