@@ -14,7 +14,7 @@ load_dotenv()
 # --- Page Config ---
 st.set_page_config(
     page_title="DeskAI — Autonomous IT Support",
-    page_icon="🛠️",
+    page_icon="🦺",
     layout="wide"
 )
 
@@ -187,12 +187,24 @@ def build_graph():
 
 app_graph = build_graph()
 
+# --- Session State ---
+if "query" not in st.session_state:
+    st.session_state.query = ""
+if "submitted" not in st.session_state:
+    st.session_state.submitted = False
+
 # --- Main Layout ---
 left, right = st.columns([1.2, 1])
 
 with left:
     st.markdown("### 📥 Describe Your Issue")
-    query = st.text_input("", placeholder="e.g. My VPN is not connecting since this morning...")
+
+    query = st.text_input(
+        "",
+        value=st.session_state.query,
+        placeholder="e.g. My VPN is not connecting since this morning...",
+        key="input_box"
+    )
 
     st.markdown("**Common issues:**")
     examples = [
@@ -206,9 +218,14 @@ with left:
     cols = st.columns(2)
     for i, ex in enumerate(examples):
         if cols[i % 2].button(ex, key=ex):
-            query = ex
+            st.session_state.query = ex
+            st.session_state.submitted = True
+            st.rerun()
 
     resolve = st.button("🚀 Get Resolution", type="primary")
+    if resolve and query.strip():
+        st.session_state.query = query
+        st.session_state.submitted = True
 
 with right:
     st.markdown("### ⚙️ How DeskAI Works")
@@ -230,11 +247,12 @@ with right:
     """, unsafe_allow_html=True)
 
 # --- Result ---
-if resolve and query.strip():
+if st.session_state.submitted and st.session_state.query.strip():
+    st.session_state.submitted = False
     st.markdown("---")
     with st.spinner("🤖 DeskAI is analyzing your issue..."):
         result = app_graph.invoke({
-            "query": query,
+            "query": st.session_state.query,
             "docs": [],
             "context": "",
             "response": "",
@@ -265,7 +283,7 @@ if resolve and query.strip():
     with st.expander("🔍 View Knowledge Base Sources"):
         st.code(result["context"], language="text")
 
-elif resolve and query.strip() == "":
+elif resolve and not query.strip():
     st.warning("Please describe your issue first.")
 
 # --- Footer ---
