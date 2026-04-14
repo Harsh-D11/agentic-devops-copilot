@@ -146,6 +146,24 @@ st.markdown("""
         border-color: #00e5a0 !important;
         box-shadow: 0 0 0 2px #00e5a022 !important;
     }
+        /* Remove red focus ring - replace with green */
+    .stTextInput > div > div > input:focus {
+        border-color: #00e5a0 !important;
+        box-shadow: 0 0 0 2px #00e5a033 !important;
+        outline: none !important;
+    }
+    .stTextInput > div {
+        border-color: transparent !important;
+    }
+    /* Remove Streamlit's default red outline */
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    .stTextInput > div > div > input:focus-visible {
+        border-color: #00e5a0 !important;
+        box-shadow: 0 0 0 2px #00e5a033 !important;
+    }
 
     /* Quick buttons */
     .quick-label {
