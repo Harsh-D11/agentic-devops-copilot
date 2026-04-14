@@ -156,18 +156,39 @@ st.markdown("""
         margin: 20px 0 10px 0;
     }
 
-    /* Resolve button */
+        /* Quick issue buttons - small pill style */
     .stButton > button {
-        background: #00e5a0 !important;
+        background: #1a1a2e !important;
+        color: #00e5a0 !important;
+        border: 1px solid #00e5a044 !important;
+        border-radius: 20px !important;
+        padding: 8px 14px !important;
+        font-size: 0.85em !important;
+        font-weight: 500 !important;
+        width: 100% !important;
+        margin-top: 4px !important;
+    }
+    .stButton > button:hover {
+        border-color: #00e5a0 !important;
+        background: #00e5a011 !important;
+    }
+
+    /* Get Resolution CTA - big bold green */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #00e5a0, #0070f3) !important;
         color: #0d1117 !important;
         border: none !important;
-        border-radius: 8px !important;
-        padding: 14px 32px !important;
-        font-size: 1em !important;
-        font-weight: 700 !important;
-        width: 100% !important;
-        margin-top: 16px !important;
-        transition: all 0.2s !important;
+        border-radius: 10px !important;
+        padding: 16px 32px !important;
+        font-size: 1.1em !important;
+        font-weight: 800 !important;
+        margin-top: 20px !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        opacity: 0.9 !important;
+        transform: translateY(-1px) !important;
+    }
+
     }
     .stButton > button:hover {
         background: #00c988 !important;
