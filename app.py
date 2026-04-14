@@ -450,14 +450,6 @@ if st.session_state.submitted and st.session_state.query.strip():
             "attempts": 0
         })
 
-    r1, r2, r3 = st.columns(3)
-    with r1:
-        st.metric("Status", "🚨 Escalated" if result["escalate"] else "✅ Resolved")
-    with r2:
-        st.metric("Confidence", result["confidence"])
-    with r3:
-        st.metric("Response Time", "< 2s")
-
     if result["escalate"]:
         st.markdown(f"""
         <div class="escalate-card">
